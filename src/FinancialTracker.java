@@ -25,9 +25,9 @@ public class FinancialTracker {
                 case "P":
                     manager.makePayment(); // Now this also saves to file
                     break;
-//                case "L":
-//                    manager.showLedgerMenu();
-//                    break;
+                case "L":
+                    manager.showLedgerMenu();
+                    break;
                 case "X":
                      System.out.println("Exiting. Goodbye!");
                      return;

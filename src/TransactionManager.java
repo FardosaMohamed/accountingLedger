@@ -52,42 +52,6 @@ public class TransactionManager {
         }
     }
 
-    // Write a transaction
-    public void writeTransaction() {
-        Scanner scanner = new Scanner(System.in);
-
-        //Collect user input
-        System.out.println("Enter the date: ");
-        String date = scanner.nextLine();
-        System.out.println("Enter the time: ");
-        String time = scanner.nextLine();
-        System.out.println("Enter the description: ");
-        String description = scanner.nextLine();
-        System.out.println("Enter the vendor: ");
-        String vendor = scanner.nextLine();
-        System.out.println("Enter the amount: ");
-        double amount = scanner.nextDouble();
-
-        // Create a new Transaction object
-        Transaction newTransaction = new Transaction(date, time, description, vendor, amount);
-
-        // Add it to the transaction list
-        transactions.add(newTransaction);
-
-        // Save to the CSV file
-        saveTransactionToFile(newTransaction);
-
-    }
-
-    public void viewTransactions() {
-        if (transactions.isEmpty()) {
-            System.out.println("No transactions to display.");
-        } else {
-            for (Transaction transaction : transactions) {
-                System.out.println(transaction); // This calls the toString() method
-            }
-        }
-    }
 
     public void saveTransactionToFile(Transaction transactions) {
         String fileName = "transactions.csv";
@@ -160,5 +124,63 @@ public class TransactionManager {
         saveTransactionToFile(newTransaction); // Save to CSV
         System.out.println("Payment added successfully!");
     }
+    public void showLedgerMenu() {
+        Scanner scanner = new Scanner(System.in);
 
+        while (true) {
+            System.out.println("\n--- Ledger Screen ---");
+            System.out.println("A) All Transactions");
+            System.out.println("D) Deposits");
+            System.out.println("P) Payments");
+            System.out.println("R) Reports");
+            System.out.println("H) Home");
+            System.out.print("Choose an option: ");
+            String choice = scanner.nextLine().toUpperCase();
+
+            switch (choice) {
+                case "A":
+                    viewAllTransactions();
+                    break;
+                case "D":
+                    viewDeposits();
+                    break;
+                case "P":
+                    viewPayments();
+                    break;
+                case "R":
+//                    showReportsMenu(); // We’ll add this later
+//                    break;
+                case "H":
+                    return; // Go back to Home screen
+                default:
+                    System.out.println("Invalid option. Try again.");
+            }
+        }
+    }
+    public void viewAllTransactions() {
+        System.out.println("\n--- All Transactions ---");
+        for (int i = transactions.size() - 1; i >= 0; i--) {
+            System.out.println(transactions.get(i)); // Newest first
+        }
+    }
+
+    public void viewDeposits() {
+        System.out.println("\n--- Deposits Only ---");
+        for (int i = transactions.size() - 1; i >= 0; i--) {
+            Transaction t = transactions.get(i);
+            if (t.getAmount() > 0) {
+                System.out.println(t);
+            }
+        }
+    }
+
+    public void viewPayments() {
+        System.out.println("\n--- Payments Only ---");
+        for (int i = transactions.size() - 1; i >= 0; i--) {
+            Transaction t = transactions.get(i);
+            if (t.getAmount() < 0) {
+                System.out.println(t);
+            }
+        }
+    }
 }
