@@ -35,6 +35,6 @@ public class FinancialTracker {
 //                    System.out.println("Invalid choice. Please try again.");}
 
 
-            }
         }
     }
+}
