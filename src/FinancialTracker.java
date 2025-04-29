@@ -18,21 +18,21 @@ public class FinancialTracker {
 
             String choice = scanner.nextLine().toUpperCase();
 
-//            switch (choice) {
-//                case "D":
-//                    manager.addDeposit();
-//                    break;
-//                case "P":
-//                    manager.makePayment(); // Now this also saves to file
-//                    break;
+            switch (choice) {
+                case "D":
+                    manager.addDeposit();
+                    break;
+                case "P":
+                    manager.makePayment(); // Now this also saves to file
+                    break;
 //                case "L":
-//                    manager.showLedgerMenu()
+//                    manager.showLedgerMenu();
 //                    break;
-//                case "X"
-//                     System.out.println("Exiting. Goodbye!");
-//                     return;
-//                default:
-//                    System.out.println("Invalid choice. Please try again.");}
+                case "X":
+                     System.out.println("Exiting. Goodbye!");
+                     return;
+                default:
+                    System.out.println("Invalid choice. Please try again.");}
 
 
         }

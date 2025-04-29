@@ -8,8 +8,10 @@ import java.util.Scanner;
 
 public class TransactionManager {
     ArrayList<Transaction> transactions = new ArrayList<>();
-    public TransactionManager(){
+
+    public TransactionManager() {
     }
+
     public void loadTransactionsFromFile() {
         String fileName = "transactions.csv";
 
@@ -49,8 +51,9 @@ public class TransactionManager {
             System.out.println("Error reading file: " + e.getMessage());
         }
     }
+
     // Write a transaction
-    public void writeTransaction(){
+    public void writeTransaction() {
         Scanner scanner = new Scanner(System.in);
 
         //Collect user input
@@ -66,7 +69,7 @@ public class TransactionManager {
         double amount = scanner.nextDouble();
 
         // Create a new Transaction object
-        Transaction newTransaction = new Transaction(date, time , description, vendor, amount);
+        Transaction newTransaction = new Transaction(date, time, description, vendor, amount);
 
         // Add it to the transaction list
         transactions.add(newTransaction);
@@ -75,6 +78,7 @@ public class TransactionManager {
         saveTransactionToFile(newTransaction);
 
     }
+
     public void viewTransactions() {
         if (transactions.isEmpty()) {
             System.out.println("No transactions to display.");
@@ -100,6 +104,7 @@ public class TransactionManager {
             System.out.println("Error writing transaction to file: " + e.getMessage());
         }
     }
+
     public void addDeposit() {
         Scanner scanner = new Scanner(System.in);
 
@@ -127,6 +132,7 @@ public class TransactionManager {
         saveTransactionToFile(newTransaction); // Save to CSV
         System.out.println("Deposit added successfully!");
     }
+
     public void makePayment() {
         Scanner scanner = new Scanner(System.in);
 
