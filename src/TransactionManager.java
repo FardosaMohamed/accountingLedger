@@ -124,6 +124,7 @@ public class TransactionManager {
         saveTransactionToFile(newTransaction); // Save to CSV
         System.out.println("Payment added successfully!");
     }
+
     public void showLedgerMenu() {
         Scanner scanner = new Scanner(System.in);
 
@@ -157,6 +158,7 @@ public class TransactionManager {
             }
         }
     }
+
     public void viewAllTransactions() {
         System.out.println("\n--- All Transactions ---");
         for (int i = transactions.size() - 1; i >= 0; i--) {
@@ -183,4 +185,59 @@ public class TransactionManager {
             }
         }
     }
+
+    public void showReportsMenu() {
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("\n--- Report Screen ---");
+            System.out.println("1) Month to Date");
+            System.out.println("2) Previous Month");
+            System.out.println("3) Year to Date");
+            System.out.println("4) Previous Year");
+            System.out.println("5) Search by Vendor");
+            System.out.println("0) Back");
+            System.out.print("Choose an option: ");
+
+            String choice = scanner.nextLine();
+
+            switch (choice) {
+                case "1":
+                    showMonthToDate();
+                    break;
+                case "2":
+                    showPreviousMonth();
+                    break;
+                case "3":
+                    showYearToDate();
+                    break;
+                case "4":
+                    showPreviousYear();
+                    break;
+                case "5":
+                    searchByVendor();
+                    break;
+                case "0":
+                    return; // Go back to Home screen
+                default:
+                    System.out.println("Invalid option. Try again.");
+            }
+        }
+    }
+    public void showMonthToDate(){
+
+    }
+    public void showPreviousMonth(){
+
+    }
+    public void showYearToDate(){
+
+    }
+    public void showPreviousYear(){
+
+    }
+    public void searchByVendor(){
+
+    }
+
 }
