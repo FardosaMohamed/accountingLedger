@@ -82,7 +82,7 @@ public class TransactionManager {
         String description = scanner.nextLine();
         System.out.println("Enter the vendor (optional): ");
         String vendor = scanner.nextLine();
-        System.out.println("Enter the deposit amount: ");
+        System.out.println("Enter the deposit amount e.g. 100,200.. : ");
         double amount = scanner.nextDouble();
 
         // Ensure amount is positive for deposit
@@ -110,7 +110,7 @@ public class TransactionManager {
         String description = scanner.nextLine();
         System.out.println("Enter the vendor (optional): ");
         String vendor = scanner.nextLine();
-        System.out.println("Enter the payment amount: ");
+        System.out.println("Enter the payment amount e.g. -100,-200.. : ");
         double amount = scanner.nextDouble();
 
         // Ensure amount is negative for payment
