@@ -2,6 +2,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -46,7 +48,6 @@ public class TransactionManager {
                     transactions.add(transaction);
                 }
             }
-            System.out.println("Transactions loaded successfully.");
         } catch (IOException e) {
             System.out.println("Error reading file: " + e.getMessage());
         }
@@ -149,8 +150,8 @@ public class TransactionManager {
                     viewPayments();
                     break;
                 case "R":
-//                    showReportsMenu(); // We’ll add this later
-//                    break;
+                    showReportsMenu(); // We’ll add this later
+                    break;
                 case "H":
                     return; // Go back to Home screen
                 default:
@@ -224,20 +225,157 @@ public class TransactionManager {
             }
         }
     }
-    public void showMonthToDate(){
+
+    public void showMonthToDate() {
+        // 1. Get today's date
+        LocalDate today = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        System.out.println("\n--- Month to Date ---");
+        boolean found = false;
+        double totalAmount = 0;
+
+        // 2. Loop through all transactions
+        for (Transaction transaction : transactions) {
+            // Parse the transaction's date
+            String dateString = transaction.getDate(); // e.g., "2025-04-29"
+            LocalDate transDate = LocalDate.parse(dateString, formatter);
+            //Compare month/year
+            if (transDate.getMonth() == today.getMonth() && transDate.getYear() == today.getYear()) {
+                // c. Print
+                System.out.println(transaction);
+                totalAmount += transaction.getAmount();  // Add the transaction amount to the total
+                found = true;
+            }
+        }
+        if (!found) {
+            System.out.println("No transactions found for this month.");
+        } else {
+            System.out.println("\nTotal Amount for this month: " + totalAmount);
+        }
+    }
+
+    public void showPreviousMonth() {
+        // 1. Get today's date
+        LocalDate today = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        System.out.println("\n--- Previous Month ---");
+
+        boolean found = false;
+        double totalAmount = 0;
+
+        // 2. Calculate the previous month and year
+        LocalDate previousMonthDate = today.minusMonths(1);
+
+        // 3. Loop through all transactions
+        for (Transaction transaction : transactions) {
+            // a. Parse the transaction's date to a real date
+            String dateString = transaction.getDate(); // e.g., "2025-04-29"
+            LocalDate transDate = LocalDate.parse(dateString, formatter);
+            // b. Check if month and year match previous month
+            if (transDate.getYear() == previousMonthDate.getYear() && transDate.getMonth() == previousMonthDate.getMonth()) {
+                // c. If it's a match, print it
+                System.out.println(transaction);
+                totalAmount += transaction.getAmount();
+                found = true;
+            }
+        }
+
+        if (!found) {
+            System.out.println("No transactions found for the previous month.");
+        } else {
+            System.out.println("\nTotal Amount for the previous month: " + totalAmount);
+        }
+
 
     }
-    public void showPreviousMonth(){
 
+    public void showYearToDate() {
+        // 1. Get today's date
+        LocalDate today = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        System.out.println("\n--- Year to Date ---");
+
+        boolean found = false;
+        double totalAmount = 0;
+
+        // 2. Loop through all transactions
+        for (Transaction transaction : transactions) {
+            // a. Parse the transaction's date
+            String dateString = transaction.getDate(); // e.g., "2025-04-29"
+            LocalDate transDate = LocalDate.parse(dateString, formatter);
+            // b. Check if year matches today, and if date is <= today
+            if (transDate.getYear() == today.getYear() && (transDate.isBefore(today) || transDate.isEqual(today))) {
+                // c. Print
+                System.out.println(transaction);
+                totalAmount += transaction.getAmount();
+                found = true;
+            }
+        }
+        if (!found) {
+            System.out.println("No transactions found for this year.");
+        } else {
+            System.out.println("\nTotal Amount for this year: " + totalAmount);
+        }
     }
-    public void showYearToDate(){
 
+    public void showPreviousYear() {
+        // 1. Get today's date
+        LocalDate today = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        System.out.println("\n--- Previous Year ---");
+
+        boolean found = false;
+        double totalAmount = 0;
+
+        // 2. Calculate previous year
+        LocalDate previousYearDate = today.minusYears(1);
+
+        // 3. Loop through all transactions
+        for (Transaction transaction : transactions) {
+            // a. Parse the transaction's date
+            String dateString = transaction.getDate(); // e.g., "2024-04-29"
+            LocalDate transDate = LocalDate.parse(dateString, formatter);
+
+            // b. Check if the transaction is from the previous year
+            if (transDate.getYear() == previousYearDate.getYear()) {
+                // c. Print the transaction
+                System.out.println(transaction);
+                totalAmount += transaction.getAmount();
+                found = true;
+
+            }
+        }
+        if (!found) {
+            System.out.println("No transactions found for the previous year.");
+        } else {
+            System.out.println("\nTotal Amount for the previous year: " + totalAmount);
+        }
     }
-    public void showPreviousYear(){
 
-    }
-    public void searchByVendor(){
+    public void searchByVendor() {
 
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter vendor name to search: ");
+        String vendorSearch = scanner.nextLine().toLowerCase();
+
+        System.out.println("\n--- Transactions for Vendor: " + vendorSearch + " ---");
+        boolean found = false;
+
+        for (int i = transactions.size() - 1; i >= 0; i--) {
+            Transaction t = transactions.get(i);
+            if (t.getVendor().toLowerCase().contains(vendorSearch)) {
+                System.out.println(t);
+                found = true;
+            }
+        }
+
+        if (!found) {
+            System.out.println("No transactions found for that vendor.");
+        }
     }
 
 }

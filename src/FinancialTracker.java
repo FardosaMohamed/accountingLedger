@@ -1,4 +1,3 @@
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class FinancialTracker {
@@ -9,7 +8,7 @@ public class FinancialTracker {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
-            System.out.println("\n--- Home Screen Menu ---");
+            System.out.println("--- Home Screen Menu ---");
             System.out.println("D. Add Deposit ");
             System.out.println("P. Make Payment");
             System.out.println("L. Ledger");
