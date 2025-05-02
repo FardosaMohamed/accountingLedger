@@ -409,7 +409,7 @@ public class TransactionManager {
 
         // Go through each transaction and checks if it matches
         for (Transaction t : transactions) {
-            boolean matches = true; // *?* Assume it does match the search
+            boolean matches = true; // Assume it does match the search
 
             // filter for startDateInput
             if (!startDateInput.isEmpty()) {
