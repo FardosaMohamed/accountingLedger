@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Scanner;
 
 
@@ -197,6 +199,7 @@ public class TransactionManager {
             System.out.println("3) Year to Date");
             System.out.println("4) Previous Year");
             System.out.println("5) Search by Vendor");
+            System.out.println("6) Custom Search");
             System.out.println("0) Back");
             System.out.print("Choose an option: ");
 
@@ -217,6 +220,9 @@ public class TransactionManager {
                     break;
                 case "5":
                     searchByVendor();
+                    break;
+                case "6":
+                    showCustomSearch(transactions);
                     break;
                 case "0":
                     return; // Go back to Home screen
@@ -378,4 +384,94 @@ public class TransactionManager {
         }
     }
 
+    public void showCustomSearch(List<Transaction> transactions) {
+        List<Transaction> filtered = new ArrayList<>();
+        Scanner scanner = new Scanner(System.in);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        // Ask the user for filter info
+        System.out.println("\n---- Custom Search ----");
+        System.out.println("Start Date (YYY-MM-DD or leave blank): ");
+        String startDateInput = scanner.nextLine().trim(); // Ask for a starting date - filter out anything before this
+
+        System.out.println("End Date (YYY-MM-DD or leave blank): ");
+        String endDateInput = scanner.nextLine().trim(); // Ask for an ending date - filter out anything after this
+
+        System.out.println("Description (or leave blank): ");
+        String descriptionInput = scanner.nextLine().trim().toLowerCase(); // Ask for a word or phrase in the description - like "Lunch" or "rent"
+
+        System.out.println("Vendor (or leave blank): ");
+        String vendorInput = scanner.nextLine().trim().toLowerCase(); // Ask for a store or vendor name, like "Target" or "Amazon"
+
+        System.out.println("Amount (or leave blank): ");
+        String amountInput = scanner.nextLine().trim(); // Ask for a specific amount, like "25.00"
+
+
+        // Go through each transaction and checks if it matches
+        for (Transaction t : transactions) {
+            boolean matches = true; // *?* Assume it does match the search
+
+            // filter for startDateInput
+            if (!startDateInput.isEmpty()) {
+                LocalDate startDate = LocalDate.parse(startDateInput, formatter);
+                LocalDate transactionDate = LocalDate.parse(t.getDate(), formatter);
+                if (transactionDate.isBefore(startDate)) {
+                    matches = false;
+                }
+            }
+
+            // filter for endDateInput
+            if (!endDateInput.isEmpty()) {
+                LocalDate endDate = LocalDate.parse(endDateInput, formatter);
+                LocalDate transactionDate = LocalDate.parse(t.getDate(), formatter);
+                if (transactionDate.isAfter(endDate)) {
+                    matches = false;
+                }
+            }
+
+            // Filter by description
+            if (!descriptionInput.isEmpty() && !t.getDescription().toLowerCase().contains(descriptionInput)) {
+                matches = false;
+            }
+
+            // Filter by vendor
+            if (!vendorInput.isEmpty() && !t.getVendor().toLowerCase().contains(vendorInput)) {
+                matches = false;
+            }
+
+            // Filter by amount
+            if (!amountInput.isEmpty()) {
+                try {
+                    double amount = Double.parseDouble(amountInput);
+                    if (t.getAmount() != amount) {
+                        matches = false;
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid amount entered. Skipping amount filter.");
+                }
+            }
+
+            // If all filters passed, print the transaction
+            if (matches) {
+                filtered.add(t);
+            }
+        }
+        // Sort by date (most recent first)
+        filtered.sort(Comparator.comparing((Transaction t) -> LocalDate.parse(t.getDate())).reversed());
+
+        // Display results
+        if (filtered.isEmpty()) {
+            System.out.println("\nNo transactions matched your search.");
+        } else {
+            System.out.println("\nMatching Transactions:");
+            System.out.printf("%-12s %-8s %-20s %-15s %10s%n", "Date", "Time", "Description", "Vendor", "Amount");
+            System.out.println("--------------------------------------------------------------------------");
+            for (Transaction t : filtered) {
+                System.out.printf("%-12s %-8s %-20s %-15s $%10.2f%n",
+                        t.getDate(), t.getTime(), t.getDescription(), t.getVendor(), t.getAmount());
+            }
+
+        }
+
+    }
 }
